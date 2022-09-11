@@ -1,16 +1,16 @@
 import regex as re
 from typing import List
 import argparse
-
 import numpy as np
 from matplotlib import pyplot as plt
-
 np.seterr(divide='ignore')
 
 from src.phone.phonology import Phonology
 from src.phone.word import Sentence, Phrase, Word
 from src.util.converter import convert_sentence
 from src.util.parser import scrub
+
+
 
 AUDIO_DIR = 'dat/phones/'
 PHONE_FILE = 'dat/phonemes.csv'

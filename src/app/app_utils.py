@@ -1,12 +1,10 @@
 """
-This module contains the Streamlit app.
+This module contains functions used by the Streamlit app.
 """
 import streamlit as st
 import numpy as np
 from matplotlib import pyplot as plt
-from src.app.fetcher import fetch_word
 from src.app.phonology_options import digrams
-from src.app.phonology_select import add_phonology
 from src.main import split_sentences, AUDIO_DIR
 from src.phone.phonology import Phonology
 from src.util.converter import convert_sentence, buffer
@@ -43,10 +41,10 @@ def speak(phonology: repr(Phonology), audio_container, txt2spk, pauses=True, spe
 
     Parameters
     ----------
-    phonology : ``Phonology``
+    phonology : `Phonology`
         Mapping of PIE phonemes to IPA.
     audio_container : st.container
-        ``Streamlit`` container for the synthesized speech.
+        `Streamlit` container for the synthesized speech.
     txt2spk : str
         Text to synthesize to speech.
     pauses : bool
@@ -60,36 +58,39 @@ def speak(phonology: repr(Phonology), audio_container, txt2spk, pauses=True, spe
     """
     audio_container.empty()
     with st.spinner('Generating speech...'):
-        sentences = split_sentences(txt2spk, phonology)
+        try:
+            sentences = split_sentences(txt2spk, phonology)
+        except ValueError as ve:
+            st.error(ve)
+        else:
+            accent = st.session_state['accent']
+            if len(sentences) == 1:
+                pauses = False
+            if len(sentences) > 0:
+                out = convert_sentence(sentences[0], AUDIO_DIR, pauses=pauses, accent=accent)
+                ipa = sentences[0].ipa().replace('`', r'\'')
+                for s in sentences[1:]:
+                    out = out.append(convert_sentence(s, AUDIO_DIR, pauses=pauses, accent=accent))
+                    ipa += s.ipa().replace('`', r'\'')
 
-        accent = st.session_state['accent']
-        if len(sentences) == 1:
-            pauses = False
-        if len(sentences) > 0:
-            out = convert_sentence(sentences[0], AUDIO_DIR, pauses=pauses, accent=accent)
-            ipa = sentences[0].ipa().replace('`', r'\'')
-            for s in sentences[1:]:
-                out = out.append(convert_sentence(s, AUDIO_DIR, pauses=pauses, accent=accent))
-                ipa += s.ipa().replace('`', r'\'')
+                if out:
+                    if not pauses:
+                        audio_container.info(ipa.replace('.', ''))  # remove period from single word
+                    else:
+                        audio_container.info(ipa)
 
-            if out:
-                if not pauses:
-                    audio_container.info(ipa.replace('.', ''))  # remove period from single word
-                else:
-                    audio_container.info(ipa)
+                    # add audio
+                    buf = buffer(out)
+                    audio_container.audio(buf, format='audio/wav')
 
-                # add audio
-                buf = buffer(out)
-                audio_container.audio(buf, format='audio/wav')
-
-                # add spectrogram
-                if spectrogram:
-                    Pxx, freq, bins, im = plt.specgram(out.get_array_of_samples(), Fs=out.frame_rate, NFFT=512)
-                    plt.ylabel('Frequency [Hz]')
-                    plt.xlabel('Time [sec]')
-                    ax = plt.gca()
-                    ax.set_ylim([0, 4000])
-                    audio_container.pyplot(plt)
+                    # add spectrogram
+                    if spectrogram:
+                        Pxx, freq, bins, im = plt.specgram(out.get_array_of_samples(), Fs=out.frame_rate, NFFT=512)
+                        plt.ylabel('Frequency [Hz]')
+                        plt.xlabel('Time [sec]')
+                        ax = plt.gca()
+                        ax.set_ylim([0, 4000])
+                        audio_container.pyplot(plt)
 
 
 def display_definition(word_container, word_d: dict) -> None:
@@ -100,8 +101,8 @@ def display_definition(word_container, word_d: dict) -> None:
     ----------
     word_d : dict
         Word dictionary containing the word, url, part of speech, and url.
-    word_container : ``Streamlit`` container
-        ``Streamlit`` container to place the definition.
+    word_container : `Streamlit` container
+        `Streamlit` container to place the definition.
     """
     word_container.empty()
     word_container.subheader('[' + word_d['word'] + '](' + word_d['url'] + ')')

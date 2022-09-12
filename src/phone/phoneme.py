@@ -66,14 +66,11 @@ class Phoneme:
             self.unaccented = remove_accent(self.phoneme)
             self.accent = True
 
-        #print('symbol', symbol, self.unaccented)
-
         # determine Cover
         self.cover = Cover.find(self.unaccented)
 
         # set ipa
         self.symbol = phonology.get(self.unaccented)
-        #print('phoneme:', self.phoneme, self.symbol)
 
         # split into individual phones
         self.phones = []

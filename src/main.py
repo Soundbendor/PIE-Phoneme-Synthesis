@@ -11,7 +11,6 @@ from src.util.converter import convert_sentence
 from src.util.parser import scrub
 
 
-
 AUDIO_DIR = 'dat/phones/'
 PHONE_FILE = 'dat/phonemes.csv'
 

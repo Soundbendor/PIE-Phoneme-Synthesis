@@ -1,21 +1,49 @@
+"""
+This module contains the Streamlit app.
+"""
+
 import streamlit as st
 
+from src.app.about_text import about_PIE_text, about_Author, about_Tool, about_Use, about_Limitations
 from src.app.fetcher import fetch_word
 from src.app.sampler import sheep_and_horses, king_and_god, vocab_word
-
-# Title and Icon
-# alternate: \U0001F304
 from src.app.app_utils import load_map, display_definition, speak
 from src.app.phonology_select import add_phonology
 from src.phone.phonology import Phonology
 
+# Streamlit age config
+#    alternate icons?: \U0001F304, \U0001F4AC
 st.set_page_config(page_title="PIE Text-to-Speech", page_icon='\U0001F5EF')
-st.title('Proto-Indo-European Text to Speech')
 
 # initial random word
 rand_word_dict = fetch_word()
 if 'random_word' not in st.session_state:
     st.session_state['random_word'] = rand_word_dict
+
+# About tab
+with st.expander("ℹ️ - About", expanded=False):
+    tab_Overview, tab_Language, tab_Tool, tab_Limitations, tab_Author = \
+        st.tabs(['Overview', "PIE Language", "TTS Tool", "Limitations", "Author"])
+
+    with tab_Overview:
+        st.write(about_Use)
+    with tab_Language:
+        st.write(about_PIE_text)
+    with tab_Limitations:
+        st.write(about_Limitations)
+    with tab_Tool:
+        st.write(about_Tool)
+    with tab_Author:
+        st.write(about_Author)
+        about_image_cols = st.columns(3)
+        with about_image_cols[1]:
+            st.image('dat/img/soundbendor.jpg')
+            st.image('dat/img/OSU.png')
+
+
+# Title and Icon
+
+st.title('Proto-Indo-European Text to Speech')
 
 # Phonology tab
 with st.expander("Select Phonology"):
@@ -24,8 +52,8 @@ with st.expander("Select Phonology"):
     load_map(phonology)
 
 # Audio modes
-word_tab, text_tab, sheep_story_tab, king_story_tab = st.tabs(
-    ['Random Word', 'Enter Text', '"Sheep and the Horses"', '"King and the god"'])
+word_tab, sheep_story_tab, king_story_tab, text_tab,  = st.tabs(
+    ['Random Word', '"Sheep and the Horses"', '"King and the god"', 'Enter Text'])
 
 # Random word tab
 with word_tab:
@@ -47,13 +75,6 @@ with word_tab:
     random_word_container = st.container()
     random_word_audio_container = st.container()
 
-# Free text  tab
-with text_tab:
-    txt = 'óynos, dwóh₁, tréyes, kʷetwóres, pénkʷe'
-    text_input = st.text_area('Enter text:', txt, help='Enter PIE text to synthesis to speech')
-    speak_button_text = st.button('Speak', key='speak_button_text', help='Synthesize speech')
-    freetext_audio_container = st.container()
-
 # Sheep story tab
 with sheep_story_tab:
     title_str = '### **[' + sheep_and_horses['title'] + '](' + sheep_and_horses['url'] + ')**'
@@ -71,6 +92,13 @@ with king_story_tab:
     st.success(king_and_god['pie'])
     speak_button_king = st.button('Speak', key='speak_button_king', help='Synthesize speech')
     king_audio_container = st.container()
+
+# Free text  tab
+with text_tab:
+    txt = 'óynos, dwóh₁, tréyes, kʷetwóres, pénkʷe'
+    text_input = st.text_area('Enter text:', txt, help='Enter PIE text to synthesis to speech')
+    speak_button_text = st.button('Speak', key='speak_button_text', help='Synthesize speech')
+    freetext_audio_container = st.container()
 
 # speak random word
 if random_word_button:
@@ -103,3 +131,5 @@ if speak_button_sheep:
 # speak King story
 if speak_button_king:
     speak(phonology, king_audio_container, king_and_god['pie'], pauses=True, spectrogram=False)
+
+

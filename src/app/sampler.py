@@ -3,7 +3,7 @@ Sample texts and word lists in PIE.
 """
 import random
 
-# Schneider's fable  ʰʷ
+# Schneider's fable
 sheep_and_horses = {'title': 'The Sheep and the Horses', 'url': 'https://en.wikipedia.org/wiki/Schleicher%27s_fable',
                     'pie': 'H₂áwej h₁josméj h₂wl̥h₁náh₂ né h₁ést, só h₁éḱwoms derḱt. Só gʷr̥hₓúm wóǵʰom wéǵʰet; só '
                            'méǵh₂m̥ bʰórom; só (dʰ)ǵʰémonm̥ h₂ṓḱu bʰéret. H₂ówis h₁ékʷojbʰ(j)os wéwkʷet: ('

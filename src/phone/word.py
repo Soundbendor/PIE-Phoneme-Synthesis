@@ -33,7 +33,8 @@ class Word:
         # tokenize
         for token in tokenize(self.word):
             if not phonology.verify(token):
-                raise ValueError('\'{}\' in {} ({}) is not a valid character in PIE'.format(token, self.word, text))
+                raise ValueError('Error: \'{}\' in {} is not a valid character in PIE. '
+                                 'Please fix your text and try again.'.format(token, self.word))
             self.phonemes.append(Phoneme(token, phonology))
 
         # syllables

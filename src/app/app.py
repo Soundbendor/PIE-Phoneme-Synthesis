@@ -17,11 +17,6 @@ rand_word_dict = fetch_word()
 if 'random_word' not in st.session_state:
     st.session_state['random_word'] = rand_word_dict
 
-# Title and Icon
-# \U0001F304
-st.set_page_config(page_title="PIE Text-to-Speech", page_icon='\U0001F5EF')
-st.title('Proto-Indo-European Text to Speech')
-
 
 def load_map(phonology: repr(Phonology)) -> None:
     """

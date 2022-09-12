@@ -33,7 +33,7 @@ with word_tab:
     with random_word_cols[0]:
         st.markdown(' ')
         st.markdown(' ')
-        word_speak_button = st.button('Speak', help='Synthesis the word')
+        word_speak_button = st.button('Speak', help='Generate new pronunciation')
 
     with random_word_cols[2]:
         st.markdown(' ')

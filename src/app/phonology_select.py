@@ -8,6 +8,7 @@ from src.phone.phonology import Phonology
 
 phonology = None
 
+
 def update_map(label):
     value = st.session_state[label]
     key = label.replace('*', '').replace('[', '').replace(']', '').strip()

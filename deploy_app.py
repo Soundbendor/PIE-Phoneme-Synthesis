@@ -79,27 +79,27 @@ if random_word_button:
         rand_word_dict = fetch_word()
         st.session_state['random_word'] = rand_word_dict
         display_definition(random_word_container, rand_word_dict)
-        speak(random_word_audio_container, rand_word_dict['word'], pauses=False, spectrogram=True)
+        speak(phonology, random_word_audio_container, rand_word_dict['word'], pauses=False, spectrogram=True)
     else:
         # fetch from specific word list
         vocab_word_dict = fetch_word(vocab_word(vocab_select))
         st.session_state['random_word'] = vocab_word_dict
         display_definition(random_word_container, vocab_word_dict)
-        speak(random_word_audio_container, vocab_word_dict['word'], pauses=False, spectrogram=True)
+        speak(phonology, random_word_audio_container, vocab_word_dict['word'], pauses=False, spectrogram=True)
 
 # repeat random word
 if word_speak_button:
     display_definition(random_word_container, st.session_state['random_word'])
-    speak(random_word_audio_container, st.session_state['random_word']['word'], pauses=False, spectrogram=True)
+    speak(phonology, random_word_audio_container, st.session_state['random_word']['word'], pauses=False, spectrogram=True)
 
 # speak free text
 if speak_button_text:
-    speak(freetext_audio_container, text_input, pauses=True, spectrogram=True)
+    speak(phonology, freetext_audio_container, text_input, pauses=True, spectrogram=True)
 
 # speak Sheep story
 if speak_button_sheep:
-    speak(sheep_audio_container, sheep_and_horses['pie'], pauses=True, spectrogram=False)
+    speak(phonology, sheep_audio_container, sheep_and_horses['pie'], pauses=True, spectrogram=False)
 
 # speak King story
 if speak_button_king:
-    speak(king_audio_container, king_and_god['pie'], pauses=True, spectrogram=False)
+    speak(phonology, king_audio_container, king_and_god['pie'], pauses=True, spectrogram=False)

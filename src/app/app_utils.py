@@ -37,12 +37,14 @@ def load_map(phonology: repr(Phonology)) -> None:
             phonology.set(key, value)
 
 
-def speak(audio_container, txt2spk, pauses=True, spectrogram=False):
+def speak(phonology: repr(Phonology), audio_container, txt2spk, pauses=True, spectrogram=False):
     """
     Synthesis the text and add the IPA and audio to Streamlit.
 
     Parameters
     ----------
+    phonology : ``Phonology``
+        Mapping of PIE phonemes to IPA.
     audio_container : st.container
         ``Streamlit`` container for the synthesized speech.
     txt2spk : str

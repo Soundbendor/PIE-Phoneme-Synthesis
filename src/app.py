@@ -4,9 +4,6 @@ This module contains the Streamlit app.
 import streamlit as st
 import numpy as np
 from matplotlib import pyplot as plt
-
-np.seterr(divide='ignore')
-
 from src.app.fetcher import fetch_word
 from src.app.phonology_options import digrams
 from src.app.phonology_select import add_phonology
@@ -14,6 +11,7 @@ from src.main import split_sentences, AUDIO_DIR
 from src.phone.phonology import Phonology
 from src.app.sampler import sheep_and_horses, king_and_god, vocab_word
 from src.util.converter import convert_sentence, buffer
+np.seterr(divide='ignore')
 
 rand_word_dict = fetch_word()
 if 'random_word' not in st.session_state:
